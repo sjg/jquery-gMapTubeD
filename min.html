@@ -1,0 +1,36 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title>MapTubeD jQuery Plugin - Minimal Example</title> 
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/flick/jquery-ui.css" type="text/css" media="screen" /> 
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script> 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-gMapTubeD_min.js"></script>
+
+<style type="text/css">
+	.map{
+		width:  1048px;
+		height: 900px;
+		margin: 0 auto;
+		}
+</style>
+
+</head> 
+<body>  
+  <br/><br/>
+  <div id="map_canvas" class="map"></div>
+  
+  <br/><br/>
+  <script type="text/javascript">
+  		jQuery.noConflict();
+		jQuery(document).ready(function () {
+    			jQuery("#map_canvas").gMapTubeD({ 
+    							descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_ww_desc.xml', 
+    							address: 'UK', 
+    							zoom: 5
+    					});
+			});						
+  </script>
+</body>
+</html>

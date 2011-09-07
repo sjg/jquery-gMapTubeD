@@ -1,0 +1,49 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title>jQuery OpenLayers and MapTubeD Test</title> 
+<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-maptube-openLayers.js"></script>
+
+<style type="text/css">
+	.map{
+		width:  1048px;
+		height: 400px;
+	}
+</style>
+
+</head> 
+<body> 
+  <div id="map_canvas"   class="map"></div> <br/><br/>
+  <div id="map_canvas_2" class="map"></div> <br/><br/>
+  <div id="map_canvas_3" class="map"></div> <br/><br/>
+  
+  <script type="text/javascript">
+		jQuery(document).ready(function () {
+    		jQuery("#map_canvas").openLayersMapTubeD({ descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_ww_desc.xml' });
+    		
+			
+			jQuery("#map_canvas_2").openLayersMapTubeD({ 
+									descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml',
+									latitude: 	51.500143,
+									longitude:  -0.126232,
+									maptype:    'sat',
+									zoom:		10
+								  });
+			
+			
+			jQuery("#map_canvas_3").openLayersMapTubeD({
+											descriptor: [
+														'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',
+														'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml'
+														],
+											address: 'London',
+											zoom: 10,
+											maptype: 'terrain'
+										});
+								
+		});
+  </script>
+</body>
+</html> 

@@ -1,0 +1,213 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title>MapTubeD jQuery Plugin - Advanced visualisations made easy!</title> 
+<link href='http://fonts.googleapis.com/css?family=Varela+Round&v2' rel='stylesheet' type='text/css'> 
+<link href='http://shjs.sourceforge.net/css/sh_vampire.min.css' rel='stylesheet' type='text/css'> 
+<link href='style.css' rel='stylesheet' type='text/css'> 
+
+<script type="text/javascript" src="http://shjs.sourceforge.net/sh_main.min.js"></script>
+<script type="text/javascript" src="http://shjs.sourceforge.net/lang/sh_javascript.min.js"></script>
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script> 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="js/jquery-gMapTubeD.js"></script>
+
+<script type="text/javascript">
+  		jQuery.noConflict();
+</script>
+
+</head> 
+<body onload="sh_highlightDocument();"> 
+	
+	<h1> MapTubeD jQuery Plugin <h1> 
+	<h2> Advanced visualisations made easy!<h2>
+	<br/>
+	<span class="menu-item"><a href="index.html">Home</a></span>
+	<span class="menu-item"><a href="min.html">Minified Example</a></span>
+	<span class="menu-item"><a href="slider.html">Slider Example</a></span>
+	<br/>
+	
+	<h3> Setup - Header </h3>
+	<pre class="sh_javascript">
+		&lt;head&gt;
+			&lt;script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"&gt;&lt;/script&gt; 
+			&lt;script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"&gt;&lt;/script&gt;
+			&lt;script type="text/javascript" src="js/jquery-gMapTubeD.min.js"&gt;&lt;/script&gt;		
+		&lt;/head&gt;
+		
+		//Optional - Allows MapTubeD Plugin to play nicely with other js libraries!
+		&lt;script type="text/javascript"&gt;
+  			jQuery.noConflict();
+		&lt;/script&gt;
+		
+		//Inline CSS - You must, at minimum, give a height for the map container
+		&lt;style type="text/css"&gt;
+			.map{
+				width:  1030px;
+				height: 400px;
+			}
+		&lt;/style&gt;
+	</pre>
+	
+	<h3> Example 1 - Simple Map </h3>
+	<div id="simpleMap" class="map"></div>
+	<pre class="sh_javascript">
+		&lt;div id="simpleMap" class="map"&gt;&lt;/div&gt;
+		&lt;script type="text/javascript"&gt;
+			jQuery(document).ready(function () {
+    				jQuery("#simpleMap").gMapTubeD({ descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_ww_desc.xml' });
+    			});
+    		&lt;/script&gt;
+	</pre>
+	
+	
+	<h3> Example 2 - Simple Map (with some options) </h3>
+  	<div id="simpleMapWithOptions" class="map"></div>
+  	<pre class="sh_javascript">
+  		&lt;div id="simpleMapWithOptions" class="map"&gt;&lt;/div&gt;
+  		&lt;script type="text/javascript"&gt;
+			jQuery(document).ready(function () {
+				jQuery("#simpleMapWithOptions").gMapTubeD({ 
+					descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml',
+					latitude:   51.500143,
+					longitude:  -0.126232,
+					maptype:    'sat',
+					zoom:	    10
+				});
+    			});
+    		&lt;/script&gt;
+	</pre>
+  	
+  	
+  	<h3> Example 3 - Multi Layered, Geocoded Map </h3>
+  	<div id="geocodeMap" class="map"></div>
+  	<pre class="sh_javascript">
+  		&lt;div id="geocodeMap" class="map"&gt;&lt;/div&gt;
+  		&lt;script type="text/javascript"&gt;
+			jQuery(document).ready(function () {
+				jQuery("#geocodeMap").gMapTubeD({
+					descriptor: [
+							'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',
+							'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml'
+						    ],
+					address: 'London',
+					zoom: 	 10,
+					maptype: 'terrain'
+				});	
+    			});
+    		&lt;/script&gt;
+	</pre>
+	
+	<h3> Example 4 - Multi Layered, Advanced Options Map </h3>
+	<div id="advancedMultiLayered" class="map"></div>
+	<pre class="sh_javascript">
+		&lt;div id="advancedMultiLayered" class="map"&gt;&lt;/div&gt;
+		&lt;script type="text/javascript"&gt;
+			jQuery(document).ready(function () {
+	
+				jQuery("#advancedMultiLayered").gMapTubeD({
+						descriptor: [
+            					  {  layer: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml', type: 'mtd', opacity: 1 },
+            					  {  layer: 'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',  type: 'smr', opacity: 0.7 }
+           					],
+           					address: 'UK',
+						maptype: 'terrain',
+						zoom: 5
+				});		
+			});			
+		&lt;/script&gt;
+	</pre>
+  	
+  	<h3> Example 5 - Styled Map </h3>
+  	<div id="styledMap" class="map"></div>
+	<pre class="sh_javascript">
+		&lt;div id="styledMap" class="map"&gt;&lt;/div&gt;
+		&lt;script type="text/javascript"&gt;
+			jQuery(document).ready(function () {
+				var styleOptions = [
+						{   	
+						    featureType: 'all',
+              					    stylers: [
+               	 						{saturation: -100},
+                						{gamma: 0.50},
+		  						{invert_lightness: 'true'}
+              		  			    	     ]
+              		  			}, 
+	     					{ featureType: "all",  elementType: "labels", stylers: [ { visibility: "off" } ] },
+						{ featureType: "poi",  elementType: "all",    stylers: [ { visibility: "off" } ] },
+						{ featureType: "road", elementType: "all",    stylers: [ { visibility: "off" } ] }
+				 ];   
+			
+			
+				jQuery("#styledMap").gMapTubeD({ 
+					descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_ww_desc.xml',
+					setStyle: { id:'Dark Night',  style: styleOptions }
+				});
+			});
+		&lt;/script&gt;
+	</pre>
+	
+  <script type="text/javascript">
+  
+		jQuery(document).ready(function () {
+    			jQuery("#simpleMap").gMapTubeD({ descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_ww_desc.xml' });
+    		
+			    jQuery("#simpleMapWithOptions").gMapTubeD({ 
+									descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml',
+									latitude: 	51.500143,
+									longitude:  -0.126232,
+									maptype:    'sat',
+									zoom:		10
+								  });
+			
+				jQuery("#geocodeMap").gMapTubeD({
+											descriptor: [
+														'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',
+														'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml'
+														],
+											address: 'London',
+											zoom: 10,
+											maptype: 'terrain'
+										});
+										
+				jQuery("#advancedMultiLayered").gMapTubeD({
+								descriptor: [
+            									{  layer: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml', type: 'mtd', opacity: 1 },
+            									{  layer: 'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',  type: 'smr', opacity: 0.7 }
+           									],
+           						address: 'UK',
+								maptype: 'terrain',
+								zoom: 5
+							});						
+										
+										
+										
+										
+										
+				// Declare New Style G3 Style 
+				// Build your own styled map with the Google Maps v3 Style Wizard Web App	
+				// http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html
+				var styleOptions = [
+										{   featureType: 'all',
+              									stylers: [
+               	 											{saturation: -100},
+                											{gamma: 0.50},
+		  													{invert_lightness: 'true'}
+              		  					 				 ]
+            							}, 
+	     								{ featureType: "all",  elementType: "labels", stylers: [ { visibility: "off" } ] },
+										{ featureType: "poi",  elementType: "all",    stylers: [ { visibility: "off" } ] },
+										{ featureType: "road", elementType: "all",    stylers: [ { visibility: "off" } ] }
+				  	  			   ];   
+			
+			
+				jQuery("#styledMap").gMapTubeD({ 
+											descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_ww_desc.xml',
+											setStyle: { id:'Dark Night',  style: styleOptions }
+										 });
+		});
+  </script>
+</body>
+</html> 

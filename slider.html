@@ -1,0 +1,116 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title>MapTubeD jQuery Plugin - Slider and Extra Options Example</title> 
+<link href='style.css' rel='stylesheet' type='text/css'> 
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/flick/jquery-ui.css" type="text/css" media="screen" /> 
+<link href='http://shjs.sourceforge.net/css/sh_vampire.min.css' rel='stylesheet' type='text/css'> 
+<link href='http://fonts.googleapis.com/css?family=Varela+Round&v2' rel='stylesheet' type='text/css'> 
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script> 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="http://shjs.sourceforge.net/sh_main.min.js"></script>
+<script type="text/javascript" src="http://shjs.sourceforge.net/lang/sh_javascript.min.js"></script>
+
+<script type="text/javascript" src="js/jquery-gMapTubeD.js"></script>
+
+<script type="text/javascript" src="http://www.google.com/jsapi"></script> 
+<script type="text/javascript"> 
+	google.load("jqueryui", "1.7.2");  				
+</script>
+
+</head> 
+<body> 
+	<h1> MapTubeD jQuery Plugin <h1> 
+	<h2> Advanced visualisations made easy!<h2>
+	<br/>
+	<span class="menu-item"><a href="index.html">Home</a></span>
+	<span class="menu-item"><a href="min.html">Minified Example</a></span>
+	<span class="menu-item"><a href="slider.html">Slider Example</a></span>
+	<br/><br/><br/>
+
+  <div id="slider" style="width: 50%;"></div> 
+  <br/>
+  <span id="amount" class="link-item"></span> 
+  <span id="removeAll" class="link-item"><a href="#" onclick="removeAllLayers(map_array[0]);">Remove All Layers</a></span>
+  <span id="addNewArray" class="link-item"><a href="#" onclick="addLayerArray(map_array[0], ['http://www.surveymapper.com/datafarm.svc/172/303/descriptor', 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml']);">Add New Layers</a></span>
+  <span id="RemoveSingleLayer" class="link-item"><a href="#" onclick="removeLayer(map_array[0], 1)">Remove Layer at Pos 1</a></span>
+  
+  <br/><br/><br/>
+  <div id="map_canvas" class="map"></div>
+  
+  <br/><br/>
+  <script type="text/javascript">
+  		jQuery.noConflict();
+  		
+  		var startOpacity = 0.5;
+  		
+  		var desc =  [
+            			{  layer: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml', type: 'mtd', opacity: startOpacity },
+            			{  layer: 'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',  type: 'smr', opacity: startOpacity }
+           			];
+           			
+        //var desc =  [
+        //    			['http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml', 'mtd', 0.5 ],
+        //    		   	['http://www.surveymapper.com/datafarm.svc/172/303/descriptor', 'smr', 0.5]
+        //     		  ];   			
+        
+    	//var desc =  'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml';
+  		
+		jQuery(document).ready(function () {
+    			jQuery("#map_canvas").gMapTubeD({ 
+    							descriptor: desc,
+    							address: 'London', 
+    							zoom: 10,
+    							tileServer: {
+    											maptube: 'http://128.40.111.243/TileRequestHandler.ashx', 
+                                    			xyz: '', 
+                                    			qt: ''
+    										}
+    			});
+    					
+    			
+    			jQuery( "#amount" ).html( Math.floor(startOpacity * 100) + '%');
+				
+				jQuery( "#slider" ).slider({
+					min: 0.1,
+					max: 1.0,
+					step: 0.01,
+					value: startOpacity,
+					slide: function( event, ui ) {
+						jQuery( "#amount" ).html( Math.floor(ui.value * 100) + '%');
+						setLayerOpactiy(map_array[0], 0, ui.value);
+					}
+			});		
+    					
+    					
+    	});	
+  </script>
+
+  <pre class="sh_javascript">
+		var map_array;  // Contains all map objects on page [indexed from 0] -  google.maps.Map [v3]
+		
+		//Define TileServers
+		//If you intend to use extra layers other than mapTube then extra TileServers must be defined in the original call
+		//View source if your confused
+		
+		tileServer:	{
+                                    maptube: 'http://128.40.111.243/TileRequestHandler.ashx', 
+                                    xyz: '', 
+                                    qt: ''
+                    }
+		
+		//Extra functions - These functions are wrappers to google.maps fucntion but catch errors
+		var map = map_arrray[0];  				   // First map on page
+		
+		setLayerOpactiy(map, layerID, value);      // LayerID is layers on map [0 indexed], value is opacity value 0 - 1.0
+		addNewLayer(map,mapLayerObject, index);    // MapLayerObject is MapTubeDMapType or XYZMapType or QTMapType
+		addLayerArray(map, mapArray);			  // Add an array of maps - like original call
+		removeLayer(map, layerID);				 // Remove Layer at ID
+		removeAllLayers(map);					 // Remove all Layers from the map
+	</pre>
+
+  
+</body>
+</html>
