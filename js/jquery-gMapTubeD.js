@@ -135,7 +135,7 @@ var map_array = new Array();
 })(jQuery);
 
 // --- Helper Functions for Map Objects ------------------------------------------------------------
-function setLayerOpactiy(map, layerID, value){
+function setLayerOpacity(map, layerID, value){
     //Layer Opactities can either be from 0 - 100 or 0.0 - 1.0
     try{
         if(value > 1.1){
