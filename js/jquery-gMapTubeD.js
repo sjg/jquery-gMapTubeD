@@ -3,7 +3,7 @@
  *
  * @url		http://www.stevenjamesgray.com
  * @author	Steven James Gray <steven.james.gray@gmail.com>
- * @version	1.1.0
+ * @version	1.1.1
  */
 
 var tileServerObject;
@@ -44,10 +44,16 @@ var map_array = new Array();
 				
 			//Set map options		
 			var myOptions = {
-      			zoom: opts.zoom,
-      			center: new google.maps.LatLng(opts.latitude,opts.longitude),
-      			mapTypeId: type
-   			};
+      				zoom: opts.zoom,
+      				center: new google.maps.LatLng(opts.latitude,opts.longitude),
+      				mapTypeId: type,
+   				mapTypeControl: true,
+				streetViewControl: false,
+				mapTypeControlOptions: {
+					style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+					position: google.maps.ControlPosition.BOTTOM_CENTER
+				}			
+			};		
 	
 			// Create default map and set initial options
 			var gmap = new google.maps.Map(this, myOptions);
@@ -70,7 +76,7 @@ var map_array = new Array();
             //Choose sort method of Array
             if(opts.descriptor_reverse){
                 if(jQuery.isArray(opts.descriptor) && opts.descriptor.length > 0){
-                    opts.descriptor.revese();
+                    opts.descriptor.reverse();
                 }
             }
             
@@ -97,13 +103,14 @@ var map_array = new Array();
     				
     				gmap.setOptions({
                 	    		 mapTypeControlOptions: {
-                	        	 	mapTypeIds: [
-                	        	        opts.setStyle.id,
-      									google.maps.MapTypeId.ROADMAP,
-      									google.maps.MapTypeId.TERRAIN,
-      									google.maps.MapTypeId.SATELLITE,
-      									google.maps.MapTypeId.HYBRID
-    				   	  			]
+                	        	 		mapTypeIds: [
+                	        	        	opts.setStyle.id,
+      										google.maps.MapTypeId.ROADMAP,
+      										google.maps.MapTypeId.TERRAIN,
+      										google.maps.MapTypeId.SATELLITE,
+      										google.maps.MapTypeId.HYBRID
+    				   	  				], 
+    				   	  		 		position: google.maps.ControlPosition.RIGHT_BOTTOM
   							 	} 
                 	}); 
                 	
@@ -191,24 +198,24 @@ function addLayerArray(map, mapArray){
             	var layer;
                 if (jQuery.isArray(val) && val.length > 0) {
                 	// Old style array
-                    if (val[1] == "mtd" || val[1] == "smr") {
-                        layer = new MapTubeDMapType(val[0], tileServerObject.maptube);                        
-                    } else if (val[1] == "xyz" || val[1] == "pc") {
-                        layer = new XYZMapType(val[0], tileServerObject.xyz);
-                    } else if (val[1] == "mo" || val[1] == "qt") {
-                        layer = new QTMapType(val[0], tileServerObject.qt);
+                    if (val[2] == "mtd" || val[2] == "smr") {
+                        layer = new MapTubeDMapType(val[1], tileServerObject.maptube);                        
+                    } else if (val[2] == "xyz" || val[2] == "pc" || val[2] == "dcs" || val[2] == "dcm") {
+                        layer = new XYZMapType(val[1], tileServerObject.xyz);
+                    } else if (val[2] == "mo" || val[2] == "qt") {
+                        layer = new QTMapType(val[1], tileServerObject.qt);
                     } else {
-                        alert("This layer style is not recognised: " + val[1]);
+                        alert("This layer style is not recognised: " + val[2]);
                     }
                     
-                    //Assume third element in array is layer opacity
-            		if(val[2] != ""){ layer.setOpacity(val[2]); }else{ layer.setOpacity(1.0); }
+                    //Assume fourth element in array is layer opacity
+            		if(val[3] != ""){ layer.setOpacity(val[3]); }else{ layer.setOpacity(1.0); }
             	
                 } else if(typeof(val) == 'object'){
 					//Object Defined
 					if (val.type == "mtd" || val.type == "smr") {
                         layer = new MapTubeDMapType(val.layer, tileServerObject.maptube);                        
-                    } else if (val.type == "xyz" || val.type == "pc") {
+                    } else if (val.type == "xyz" || val.type == "pc" || val[1] == "dcs" || val[1] == "dcm") {
                         layer = new XYZMapType(val.layer, tileServerObject.xyz);
                     } else if (val.type == "mo" || val.type == "qt") {
                         layer = new QTMapType(val.layer, tileServerObject.qt);
@@ -347,7 +354,7 @@ XYZMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
             img.id = "t_" + f;
             img.style.width = this.tileSize.width + 'px';
             img.style.height = this.tileSize.height + 'px';
-            img.src = this.tileServer + this.descriptor + "/" + f;
+            img.src = this.tileServer + f + "?" + this.descriptor;
             img.style.opacity = this.opacity;
             img.style.filter = "alpha(opacity=" + this.opacity * 100 + ")";
             
