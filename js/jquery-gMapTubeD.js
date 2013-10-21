@@ -264,51 +264,108 @@ function MapTubeDMapType(descrip, tileServer) {
     
 MapTubeDMapType.prototype.tileSize = new google.maps.Size(256, 256);
 MapTubeDMapType.prototype.maxZoom = 19;
+MapTubeDMapType.prototype.getTileUrl = function(tilename) {
+  if (tilename != "blank-tile") return this.tileServer + "?u=" + this.descriptor + "&t=" + tilename + "";
+}
 MapTubeDMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
-   if (this.descriptor == "" && this.tileServer == "") {
-            var div = ownerDocument.createElement('DIV');
-            //div.innerHTML = coord;
-            div.innerHTML = "NO DATA LOADED";
-            div.style.width = this.tileSize.width + 'px';
-            div.style.height = this.tileSize.height + 'px';
-            div.style.fontSize = '20';
-            div.style.borderStyle = 'solid';
-            div.style.borderWidth = '1px';
-            div.style.borderColor = '#AAAAAA';
-            return div;
-        }
-        else {
-            var img = ownerDocument.createElement('IMG');
+  if (this.descriptor == "" && this.tileServer == "") {
+    var div = ownerDocument.createElement('DIV');
+    //div.innerHTML = coord;
+    div.innerHTML = "NO DATA LOADED";
+    div.style.width = this.tileSize.width + 'px';
+    div.style.height = this.tileSize.height + 'px';
+    div.style.fontSize = '20';
+    div.style.borderStyle = 'solid';
+    div.style.borderWidth = '1px';
+    div.style.borderColor = '#AAAAAA';
+    return div;
+  } else {
+    var isBlankTile = false;
+    var f = "";
+    if ((this.tileMaxZoom >= 0) && (zoom > this.tileMaxZoom)) {
+      isBlankTile = true;
+    } else {
+      var c = Math.pow(2, zoom);
+      var tilex = coord.x,
+        tiley = coord.y;
+      //allow wrapping
+      //if (tilex < 0) tilex = c + tilex % c;
+      //if (tilex >= c) tilex = tilex % c;
+      //if (tiley < 0) tiley = c + tiley % c;
+      //if (tiley >= c) tiley = tiley % c;
+      //only allow wrapping in x direction
+      if (tilex < 0) tilex = c + tilex % c;
+      if (tilex >= c) tilex = tilex % c;
+      if (tiley < 0) {
+        isBlankTile = true;
+      }
+      if (tiley >= c) {
+        isBlankTile = true;
+      }
 
-            //copied from customgettileurl
-            //converts tile x,y into keyhole string
-            var c = Math.pow(2, zoom);
-            var d = coord.x;
-            var e = coord.y;
-            var f = "t";
-            for (var g = 0; g < zoom; g++) {
-                c /= 2;
-                if (e < c) {
-                    if (d < c) { f += "q" }
-                    else { f += "r"; d -= c }
-                }
-                else {
-                    if (d < c) { f += "t"; e -= c }
-                    else { f += "s"; d -= c; e -= c }
-                }
+      //zoom>0 gets around nasty Google problem with bounds spanning the world being reversed
+      if ((zoom > 0) && (this.bounds != null)) {
+        var x = 360 / c * tilex - 180;
+        var y = 180 - 360 / c * tiley;
+        var x2 = x + 360 / c;
+        var y2 = y - 360 / c;
+        var lon = x; //Math.toRadians(x); //would be lon=x+lon0, but lon0=0 degrees
+        var lat = (2.0 * Math.atan(Math.exp(y / 180 * Math.PI)) - Math.PI / 2.0) * 180 / Math.PI; //in degrees
+        var lon2 = x2;
+        var lat2 = (2.0 * Math.atan(Math.exp(y2 / 180 * Math.PI)) - Math.PI / 2.0) * 180 / Math.PI; //in degrees
+        //NOTE: LatLngBounds(sw,ne) in V3 and V2
+        var tileBounds = new google.maps.LatLngBounds(new google.maps.LatLng(lat2, lon), new google.maps.LatLng(lat, lon2));
+        if (!tileBounds.intersects(this.bounds)) {
+          isBlankTile = true;
+        };
+      }
+
+      if (!isBlankTile) {
+        var d = tilex;
+        var e = tiley;
+        f = "t";
+        for (var g = 0; g < zoom; g++) {
+          c /= 2;
+          if (e < c) {
+            if (d < c) {
+              f += "q"
+            } else {
+              f += "r";
+              d -= c
             }
-                     
-            img.id = "t_" + f;
-            img.style.width = this.tileSize.width + 'px';
-            img.style.height = this.tileSize.height + 'px';
-            img.src = this.tileServer + "?u=" + this.descriptor + "&t=" + f;
-            img.style.opacity = this.opacity;
-            img.style.filter = "alpha(opacity=" + this.opacity * 100 + ")";
-            
-            this.Cache.push(img);
-            return img;
+          } else {
+            if (d < c) {
+              f += "t";
+              e -= c
+            } else {
+              f += "s";
+              d -= c;
+              e -= c
+            }
+          }
         }
+      } else {
+        f = "blank-tile";
+      }
     }
+    var img = ownerDocument.createElement('IMG');
+    img.id = "t_" + f;
+    img.style.width = this.tileSize.width + 'px';
+    img.style.height = this.tileSize.height + 'px';
+    if ((!isBlankTile) && (this.tileMaxZoom >= 0) && (zoom > this.tileMaxZoom)) {
+      //img.src = MLList.zoomPastWebService + "?z=" + this.tileMaxZoom + "&t=" + f + "&u=" + this.baseUrl;
+    } else {
+      img.src = this.getTileUrl(f);
+    }
+    //set initial opacity on image
+    img.style.opacity = this.opacity; //mozilla
+    img.style.filter = "alpha(opacity=" + this.opacity * 100 + ")"; //ie
+    //this.cache.push(img);
+    if (f != "blank-tile") {
+      return img;
+    }
+  }
+}
     MapTubeDMapType.prototype.releaseTile = function(tile) {
         tile = null;
     }

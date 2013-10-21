@@ -57,7 +57,7 @@
 		&lt;div id="simpleMap" class="map"&gt;&lt;/div&gt;
 		&lt;script type="text/javascript"&gt;
 			jQuery(document).ready(function () {
-    				jQuery("#simpleMap").gMapTubeD({ descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_ww_desc.xml' });
+    				jQuery("#simpleMap").gMapTubeD({ descriptor: 'http://www.surveymapper.com/datafarm.svc/172/303/descriptor' });
     			});
     		&lt;/script&gt;
 	</pre>
@@ -90,7 +90,7 @@
 				jQuery("#geocodeMap").gMapTubeD({
 					descriptor: [
 							'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',
-							'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml'
+							'http://www.textal.org/maptube/textal_descriptor.xml'
 						    ],
 					address: 'London',
 					zoom: 	 10,
@@ -109,7 +109,7 @@
 	
 				jQuery("#advancedMultiLayered").gMapTubeD({
 						descriptor: [
-            					  {  layer: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml', type: 'mtd', opacity: 1 },
+            					 {  layer: 'http://www.textal.org/maptube/textal_descriptor.xml', type: 'mtd', opacity: 0.3 },
             					  {  layer: 'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',  type: 'smr', opacity: 0.7 }
            					],
            					address: 'UK',
@@ -143,7 +143,10 @@
 			
 				jQuery("#styledMap").gMapTubeD({ 
 					descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_ww_desc.xml',
-					setStyle: { id:'Dark Night',  style: styleOptions }
+					setStyle: { id:'Dark Night',  style: styleOptions },
+					latitude: 	51.500143,
+					longitude:  -0.126232,
+					zoom:		5
 				});
 			});
 		&lt;/script&gt;
@@ -152,10 +155,10 @@
   <script type="text/javascript">
   
 		jQuery(document).ready(function () {
-    			jQuery("#simpleMap").gMapTubeD({ descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_ww_desc.xml' });
+    			jQuery("#simpleMap").gMapTubeD({ descriptor: 'http://www.surveymapper.com/datafarm.svc/172/303/descriptor' });
     		
 			    jQuery("#simpleMapWithOptions").gMapTubeD({ 
-									descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml',
+									descriptor: 'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',
 									latitude: 	51.500143,
 									longitude:  -0.126232,
 									maptype:    'sat',
@@ -164,8 +167,8 @@
 			
 				jQuery("#geocodeMap").gMapTubeD({
 											descriptor: [
+														'http://www.textal.org/maptube/textal_descriptor.xml',
 														'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',
-														'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml'
 														],
 											address: 'London',
 											zoom: 10,
@@ -174,7 +177,7 @@
 										
 				jQuery("#advancedMultiLayered").gMapTubeD({
 								descriptor: [
-            									{  layer: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_desc.xml', type: 'mtd', opacity: 1 },
+            									{  layer: 'http://www.textal.org/maptube/textal_descriptor.xml', type: 'mtd', opacity: 0.3 },
             									{  layer: 'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',  type: 'smr', opacity: 0.7 }
            									],
            						address: 'UK',
@@ -204,8 +207,11 @@
 			
 			
 				jQuery("#styledMap").gMapTubeD({ 
-											descriptor: 'http://bigdata.casa.ucl.ac.uk/2012/data/2012_tweets_ww_desc.xml',
-											setStyle: { id:'Dark Night',  style: styleOptions }
+											descriptor: 'http://www.surveymapper.com/datafarm.svc/172/303/descriptor',
+											setStyle: { id:'Dark Night',  style: styleOptions },
+											latitude: 	51.500143,
+											longitude:  -0.126232,
+											zoom:		5
 										 });
 		});
   </script>
